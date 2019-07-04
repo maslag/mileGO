@@ -22,3 +22,8 @@ def writeVehicleData():
     targetFile = open(currentVehiclePath, 'w')
     json.dump(vehicleData, targetFile)
     targetFile.close()
+
+# @status: working
+def setYearLimit(newLimit):
+    vehicleData["yearLimit"] = newLimit
+    writeVehicleData()

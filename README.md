@@ -45,3 +45,8 @@ Below is a summary of `api.py`, the API that supplies the functionality for the 
   - **Side Effect(s)**: writes `vehicleData` into current vehicle's file
   - **Note(s)**: should be used with any sort of operation that changes the state of `vehicleData`
 
+- **setYearLimit(newLimit)**
+  - **Input(s)**: newLimit - integer with new desired yearly limit
+  - **Output(s)**: none
+  - **Side Effect(s)**: populates `yearLimit` of current vehicle with `newLimit` 
+  - **Note(s)**: assumes the limit is valid (i.e not negative)
