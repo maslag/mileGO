@@ -50,3 +50,10 @@ Below is a summary of `api.py`, the API that supplies the functionality for the 
   - **Output(s)**: none
   - **Side Effect(s)**: populates `yearLimit` of current vehicle with `newLimit` 
   - **Note(s)**: assumes the limit is valid (i.e not negative)
+
+- **getMonthMiles(targetMonth)**
+  - **Input(s)**: targetMonth - the (only) month to get the miles of
+  - **Output(s)**: `-1` if failure, or `targetMonth`'s miles
+  - **Side Effect(s)**: 
+  - **Note(s)**: Unless `targetMonth` == first of the year, use previous month's last entry as reference. Depends on `setOdometerValue(targetMonth, targetWeek, value)` for correct functionality (See function code).
+
