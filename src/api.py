@@ -55,25 +55,43 @@ def setOdometerValue(targetMonth, targetWeek, value):
     p = getPreviousEntry(targetMonth, targetWeek)
     n = getNextEntry(targetMonth, targetWeek)
 
-    # Be sure to cover gaps
-    #if p == -1:
-        #targets = getEntryTargets(targetMonth, targetWeek)
-
-    #print(p, n, value, value-p if p != -1 else value)
     if value < p or (value > n and n != -1):
         return -1
-    
-    #if value > vehicleData["yearBudget"]:
-    #   adjust()
-    #vehicleData["yearBudget"] -= value-p if p != -1 else value
-    #vehicleData["miles"][targetMonth]["week"][targetWeek] = value
-    #writeVehicleData()
+
+    # Be sure to cover gaps
+    targets = (targetMonth, targetWeek)
+    if p == -1:
+        targets = getEntryTargets(targetMonth, targetWeek)
+
+    print(targets)
+
+    # Update month budget
+    # Update year budget
+    # Modify targets to hold value
+    # Write vehicle data
     # return 0
     
-""" # @state: testing
+# @state: working
 # @internal
 def getEntryTargets(targetMonth, targetWeek):
-    return 1 """
+    # Should have tuples of valid month, week to "cover" in setOdometerValue()
+    res = []
+
+    while(vehicleData["miles"][targetMonth]["week"][targetWeek] == -1):
+        # Add this specific gap
+        res.append((targetMonth, targetWeek))
+
+        # Adjust "going down" the data
+        if targetWeek == 0:
+            if targetMonth != 0:
+                targetMonth -= 1
+                targetWeek = 3
+            else:
+                break
+        else:
+            targetWeek -= 1
+
+    return res 
 
 # @state: working
 # @internal

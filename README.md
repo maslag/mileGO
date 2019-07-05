@@ -74,3 +74,9 @@ Below is a summary of `api.py`, the API that supplies the functionality for the 
   - **Output(s)**: the corresponding odometer value for the entry after `targetMonth`,`targetWeek` entry.
   - **Side Effect(s)**: none 
   - **Note(s)**: Internal - shouldn't be used
+
+- **getEntryTargets(targetMonth, targetWeek)**
+  - **Input(s)**: targetMonth [0 - 11], targetWeek [0 - 3]
+  - **Output(s)**: the corresponding "gaps"/unwritten values before a `targetMonth`,`targetWeek` entry.
+  - **Side Effect(s)**: none 
+  - **Note(s)**: Internal - shouldn't be used
