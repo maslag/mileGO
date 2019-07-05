@@ -46,49 +46,57 @@ def getMonthMiles(targetMonth):
     
     return max(monthData) - monthData[0]
 
-""" # @state: testing
+# @state: testing
 def setOdometerValue(targetMonth, targetWeek, value):
-    # Enforces no gaps between entries (if there is gap, fill it with current value)
-    # AND enforces entries are in increasing order
-    
+
     if value < 0:
-        print('ERR: value is negative')
         return -1
-
-    prevValue = -1
-    targets = []
-
-    # First week of a non-first month uses last week of previous one as reference
-    if targetWeek == 0 and targetMonth != 0:
-        prevValue = vehicleData["miles"][targetMonth-1]["week"][3]
-    # A non-first week uses the week before as reference
-    if targetWeek != 0:
-        # Keep track of any "gaps" (targets) to cover
-        for i in range(0, targetWeek, 1):
-            d = vehicleData["miles"][targetMonth]["week"][i]
-            if d == -1:
-                targets.append(i)
-            else:
-                prevValue = d
     
-    print('DBG: prevValue', prevValue, 'targets', targets)
-    # Validate value
-    if targetMonth == 0 and targetWeek == 0:
-        if value < vehicleData["miles"][0]["week"][1]:
-            return -1
-        else:
-            vehicleData["miles"][targetMonth]["week"][0] = value
-    elif value < prevValue:
+    p = getPreviousEntry(targetMonth, targetWeek)
+    n = getNextEntry(targetMonth, targetWeek)
+
+    # Be sure to cover gaps
+    #if p == -1:
+        #targets = getEntryTargets(targetMonth, targetWeek)
+
+    #print(p, n, value, value-p if p != -1 else value)
+    if value < p or (value > n and n != -1):
         return -1
+    
+    #if value > vehicleData["yearBudget"]:
+    #   adjust()
+    #vehicleData["yearBudget"] -= value-p if p != -1 else value
+    #vehicleData["miles"][targetMonth]["week"][targetWeek] = value
+    #writeVehicleData()
+    # return 0
+    
+""" # @state: testing
+# @internal
+def getEntryTargets(targetMonth, targetWeek):
+    return 1 """
+
+# @state: working
+# @internal
+def getPreviousEntry(targetMonth, targetWeek):
+    res = 0
+    
+    if targetWeek == 0:
+        if targetMonth != 0:
+            res = vehicleData["miles"][targetMonth-1]["week"][3]
     else:
-        # Update all necessary targets
-        vehicleData["miles"][targetMonth]["week"][targetWeek] = value
-        for i in targets:
-            vehicleData["miles"][targetMonth]["week"][i] = value
-            
+        res = vehicleData["miles"][targetMonth]["week"][targetWeek-1]
+    
+    return res
 
-    #Update yearly budget (needs getCurrentMilesUptoMonth)
-    #vehicleData["yearBudget"] = 
+# @state: working
+# @internal
+def getNextEntry(targetMonth, targetWeek):
+    res = 0
 
-    writeVehicleData()
-    return 0 """
+    if targetWeek == 3:
+        if targetMonth != 11:
+            res = vehicleData["miles"][targetMonth+1]["week"][0]
+    else:
+        res = vehicleData["miles"][targetMonth]["week"][targetWeek+1]
+    
+    return res

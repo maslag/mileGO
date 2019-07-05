@@ -52,8 +52,25 @@ Below is a summary of `api.py`, the API that supplies the functionality for the 
   - **Note(s)**: assumes the limit is valid (i.e not negative)
 
 - **getMonthMiles(targetMonth)**
-  - **Input(s)**: targetMonth - the (only) month to get the miles of
+  - **Input(s)**: targetMonth [0 - 11] - the (only) month to get the miles of
   - **Output(s)**: `-1` if failure, or `targetMonth`'s miles
   - **Side Effect(s)**: 
   - **Note(s)**: Unless `targetMonth` == first of the year, use previous month's last entry as reference. Depends on `setOdometerValue(targetMonth, targetWeek, value)` for correct functionality (See function code).
 
+- **setOdometerValue(targetMonth, targetWeek, value)**
+  - **Input(s)**: targetMonth [0 - 11], targetWeek [0 - 3], value - self explanatory
+  - **Output(s)**: -1 if failure, 0 if success
+  - **Side Effect(s)**: adjusts `yearBudget` from (calculated) miles entered 
+  - **Note(s)**: If valid, updates `miles` with a new entry on `targetMonth` and `targetWeek`. If there's unset entries before current one, it will update those as well with the current value.
+
+- **getPreviousEntry(targetMonth, targetWeek)**
+  - **Input(s)**: targetMonth [0 - 11], targetWeek [0 - 3]
+  - **Output(s)**: the corresponding odometer value for the entry before `targetMonth`,`targetWeek` entry.
+  - **Side Effect(s)**: none 
+  - **Note(s)**: Internal - shouldn't be used
+
+- **getNextEntry(targetMonth, targetWeek)**
+  - **Input(s)**: targetMonth [0 - 11], targetWeek [0 - 3]
+  - **Output(s)**: the corresponding odometer value for the entry after `targetMonth`,`targetWeek` entry.
+  - **Side Effect(s)**: none 
+  - **Note(s)**: Internal - shouldn't be used
