@@ -54,14 +54,14 @@ Below is a summary of `api.py`, the API that supplies the functionality for the 
 - **getMonthMiles(targetMonth)**
   - **Input(s)**: targetMonth [0 - 11] - the (only) month to get the miles of
   - **Output(s)**: `-1` if failure, or `targetMonth`'s miles
-  - **Side Effect(s)**: 
+  - **Side Effect(s)**: none
   - **Note(s)**: Unless `targetMonth` == first of the year, use previous month's last entry as reference. Depends on `setOdometerValue(targetMonth, targetWeek, value)` for correct functionality (See function code).
 
 - **setOdometerValue(targetMonth, targetWeek, value)**
   - **Input(s)**: targetMonth [0 - 11], targetWeek [0 - 3], value - self explanatory
   - **Output(s)**: -1 if failure, 0 if success
-  - **Side Effect(s)**: adjusts `yearBudget` from (calculated) miles entered 
-  - **Note(s)**: If valid, updates `miles` with a new entry on `targetMonth` and `targetWeek`. If there's unset entries before current one, it will update those as well with the current value.
+  - **Side Effect(s)**: adjusts `yearBudget` and `monthBudget` from (calculated) miles entered if necessary via `updateCurrentBudgets(targetMonth, targetWeek, miles)`
+  - **Note(s)**: If valid, updates `miles` with a new entry on `targetMonth` and `targetWeek`. If there's unset entries before current one, it will update those as well with the current value. 
 
 - **getPreviousEntry(targetMonth, targetWeek)**
   - **Input(s)**: targetMonth [0 - 11], targetWeek [0 - 3]
@@ -79,4 +79,10 @@ Below is a summary of `api.py`, the API that supplies the functionality for the 
   - **Input(s)**: targetMonth [0 - 11], targetWeek [0 - 3]
   - **Output(s)**: the corresponding "gaps"/unwritten values before a `targetMonth`,`targetWeek` entry.
   - **Side Effect(s)**: none 
+  - **Note(s)**: Internal - shouldn't be used
+
+- **updateCurrentBudgets(targetMonth, targetWeek, miles)**
+  - **Input(s)**: targetMonth [0 - 11], targetWeek [0 - 3], miles - miles from `setOdometerReading(targetWeek, targetMonth, value)`.
+  - **Output(s)**: none
+  - **Side Effect(s)**: adjusts `monthBudget` and `yearBudget` accordingly (See code annotations)
   - **Note(s)**: Internal - shouldn't be used

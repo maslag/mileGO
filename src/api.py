@@ -46,7 +46,7 @@ def getMonthMiles(targetMonth):
     
     return max(monthData) - monthData[0]
 
-# @state: testing
+# @state: working
 def setOdometerValue(targetMonth, targetWeek, value):
 
     if value < 0:
@@ -58,19 +58,40 @@ def setOdometerValue(targetMonth, targetWeek, value):
     if value < p or (value > n and n != -1):
         return -1
 
-    # Be sure to cover gaps
-    targets = (targetMonth, targetWeek)
+    # Get (month, week) of targets to "fill in"
+    targets = [(targetMonth, targetWeek)]
     if p == -1:
         targets = getEntryTargets(targetMonth, targetWeek)
-
-    print(targets)
-
-    # Update month budget
-    # Update year budget
-    # Modify targets to hold value
-    # Write vehicle data
-    # return 0
     
+    for item in targets:
+        vehicleData["miles"][item[0]]["week"][item[1]] = value
+
+    # You should only update the budgets if an actual "change" happened
+    if n == -1:
+        ref = getPreviousEntry(targets[len(targets)-1][0], targets[len(targets)-1][1])
+        miles = 0 if ref == 0 else value - ref
+        updateCurrentBudgets(targetMonth, targetWeek, miles)
+    
+    writeVehicleData()
+    return 0
+
+# @state: working
+# @internal
+def updateCurrentBudgets(targetMonth, targetWeek, miles):
+    vehicleData["monthBudget"][targetMonth]["value"] -= miles
+    vehicleData["yearBudget"] -= miles
+    
+    # If we've gone past the year budget, reallocate it to be the year limit / # months left
+    if vehicleData["yearBudget"] < 0:
+        vehicleData["yearBudget"] = vehicleData["yearLimit"] / (11 - targetMonth)
+
+    # Compute the new avg for the remaining months, and assign it
+    avg = vehicleData["yearBudget"] / (11 - targetMonth)
+
+    for m in range(targetMonth+1, 12):
+        vehicleData["monthBudget"][m]["value"] = avg
+    
+
 # @state: working
 # @internal
 def getEntryTargets(targetMonth, targetWeek):
